@@ -77,6 +77,7 @@ public:
 	void drawing_complete();
 	void editing_drag(int dot_no, int dx, int dy);
 	void editing_resize(dot a, dot b, dot c);
+	void editing_move(int dx, int dy);
 	void editing_show_all_ins();
 	void editing_hide_all_ins();
 };

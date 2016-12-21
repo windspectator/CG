@@ -185,6 +185,16 @@ void polygon::editing_resize(dot a, dot b, dot c)
 	refresh_border();
 }
 
+void polygon::editing_move(int dx, int dy)
+{
+	for (auto &i : lines) {
+		i.a.x += dx;
+		i.a.y += dy;
+		i.b.x += dx;
+		i.b.y += dy;
+	}
+}
+
 void polygon::editing_show_all_ins()
 {
 	for (auto &i : ins)

@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\draw">
+      <UniqueIdentifier>{773408c5-80b7-4bba-b056-6aec0c892d7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\graphics">
+      <UniqueIdentifier>{c7f88fdb-a3ee-4c37-b52b-cd6142d23ec7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\edit">
+      <UniqueIdentifier>{b4dd07a5-9523-4797-8853-46d01a0b7304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\idle">
+      <UniqueIdentifier>{12035d25-bdec-40ef-bcff-a7b32553ecf9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics.cpp">
+      <Filter>Resource Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="dispaly.cpp">
+      <Filter>Resource Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="memory.cpp">
+      <Filter>Resource Files\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="input_drawing.cpp">
+      <Filter>Resource Files\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="state.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="drawing_graphic.cpp">
+      <Filter>Resource Files\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="drawing_polygon.cpp">
+      <Filter>Resource Files\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="editing_graphic.cpp">
+      <Filter>Resource Files\edit</Filter>
+    </ClCompile>
+    <ClCompile Include="input_idle.cpp">
+      <Filter>Resource Files\idle</Filter>
+    </ClCompile>
+    <ClCompile Include="cal.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input_editing.cpp">
+      <Filter>Resource Files\edit</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="conf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="state.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input_drawing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input_editing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

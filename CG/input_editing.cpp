@@ -26,6 +26,7 @@ void editing_mouse_process(int button, int state, int x, int y)
 	if (button == GLUT_LEFT_BUTTON) {
 		if (state == GLUT_UP) {
 			editing_state.changeto(EDIT_WAITING);
+			editing_graphic.show_ins();
 			return;
 		}
 		else {

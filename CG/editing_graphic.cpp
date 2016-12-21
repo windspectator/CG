@@ -20,6 +20,36 @@ void Editing_graphic::set(list<ellipse>::iterator chosen_ins, int x, int y)
 		while (f->no != ins->father)
 			f++;
 		can_polygon = f;
+
+		can_polygon->editing_hide_all_ins();
+		ins->isdisplayed = true;
+		switch (ins->type) {
+		case _TYPE_INS_LEFT:
+			can_polygon->ins[_D_RIGHT]->isdisplayed = true;
+			break;
+		case _TYPE_INS_RIGHT:
+			can_polygon->ins[_D_LEFT]->isdisplayed = true;
+			break;
+		case _TYPE_INS_UP:
+			can_polygon->ins[_D_DOWN]->isdisplayed = true;
+			break;
+		case _TYPE_INS_DOWN:
+			can_polygon->ins[_D_UP]->isdisplayed = true;
+			break;
+		case _TYPE_INS_LEFT_UP:
+			can_polygon->ins[_D_RIGHT_DOWN]->isdisplayed = true;
+			break;
+		case _TYPE_INS_RIGHT_UP:
+			can_polygon->ins[_D_LEFT_DOWN]->isdisplayed = true;
+			break;
+		case _TYPE_INS_LEFT_DOWN:
+			can_polygon->ins[_D_RIGHT_UP]->isdisplayed = true;
+			break;
+		case _TYPE_INS_RIGHT_DOWN:
+			can_polygon->ins[_D_LEFT_UP]->isdisplayed = true;
+			break;
+		}
+
 		break;
 	}
 }
@@ -147,8 +177,7 @@ void Editing_graphic::moveto(int x, int y)
 			break;
 		case _TYPE_INS_MOVE:
 			can_polygon->editing_move(x - lastx, y - lasty);
-			
-			//	TODO
+			break;
 		}
 	}
 	lastx = x;

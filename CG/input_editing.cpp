@@ -45,9 +45,14 @@ void editing_mouse_process(int button, int state, int x, int y)
 						editing_graphic.set(i, x, y);
 						return;
 					}
+				break;
 			}
-			cg_state.changeto(IDLE);
-			editing_graphic.hide_ins();
+			return;
 		}
+	}
+
+	if (button == GLUT_RIGHT_BUTTON) {
+		cg_state.changeto(IDLE);
+		editing_graphic.hide_ins();
 	}
 }

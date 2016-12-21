@@ -40,6 +40,7 @@ public:
 		a(a), b(b) {}
 	void display();
 	void drawing_modify(dot& d);
+	void del();
 };
 
 class ellipse : public graphic
@@ -54,6 +55,7 @@ public:
 		o(o), a(a), b(b) {}
 	void display();
 	void drawing_modify(dot & d);
+	void del();
 
 	int father_type;
 	int father;
@@ -75,6 +77,8 @@ public:
 	void drawing_modify(dot& d);
 	void drawing_add_line();
 	void drawing_complete();
+	void del();
+
 	void editing_drag(int dot_no, int dx, int dy);
 	void editing_resize(dot a, dot b, dot c);
 	void editing_move(int dx, int dy);

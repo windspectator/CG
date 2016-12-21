@@ -17,10 +17,26 @@ void line::drawing_modify(dot& d)
 	b = d;
 }
 
+void line::del()
+{
+	auto i = memory.lines.begin();
+	while (i->no != no)
+		i++;
+	memory.lines.erase(i);
+}
+
 void ellipse::drawing_modify(dot & d)
 {
 	a = round(sqrt((d.x - o.x) * (d.x - o.x) + (d.y - o.y) * (d.y - o.y)));
 	b = a;
+}
+
+void ellipse::del()
+{
+	auto i = memory.ellipses.begin();
+	while (i->no != no)
+		i++;
+	memory.ellipses.erase(i);
 }
 
 polygon::polygon(dot d)
@@ -64,14 +80,6 @@ polygon::polygon(dot d)
 			break;
 		}
 	}
-
-	memory.ellipses.push_back(ellipse(d, _INS_R, _INS_R));
-	dot_ins.push_back(prev(memory.ellipses.end()));
-	dot_ins[0]->type_convert_to(_TYPE_INS_DOT);
-	dot_ins[0]->isdisplayed = false;
-	dot_ins[0]->father_type = POLYGON;
-	dot_ins[0]->father = memory.sum_polygon;
-	dot_ins[0]->dot_no = 0;
 }
 
 void polygon::refresh_border()
@@ -128,21 +136,37 @@ void polygon::drawing_add_line()
 {
 	dot last_dot = prev(lines.end())->b;
 	lines.push_back(line(last_dot));			// add a new line whose a and b are the same as last line's b
-
-	memory.ellipses.push_back(ellipse(last_dot, _INS_R, _INS_R));
-	dot_ins.push_back(prev(memory.ellipses.end()));
-	list<ellipse>::iterator current_ins = *prev(dot_ins.end());
-	current_ins->type_convert_to(_TYPE_INS_DOT);
-	current_ins->isdisplayed = false;
-	current_ins->father_type = POLYGON;
-	current_ins->father = no;
-	current_ins->dot_no = dot_ins.size() - 1;
 }
 
 void polygon::drawing_complete()
 {
 	drawing_modify(lines.begin()->a);
+
+	for (auto &i : lines) {
+		memory.ellipses.push_back(ellipse(i.a, _INS_R, _INS_R));
+		dot_ins.push_back(prev(memory.ellipses.end()));
+		list<ellipse>::iterator current_ins = *prev(dot_ins.end());
+		current_ins->type_convert_to(_TYPE_INS_DOT);
+		current_ins->isdisplayed = false;
+		current_ins->father_type = POLYGON;
+		current_ins->father = no;
+		current_ins->dot_no = dot_ins.size() - 1;
+	}
+
 	refresh_border();
+}
+
+void polygon::del()
+{
+	for (auto &i : ins)
+		memory.ellipses.erase(i);
+	for (auto &i : dot_ins)
+		memory.ellipses.erase(i);
+
+	auto i = memory.polygons.begin();
+	while (i->no != no)
+		i++;
+	memory.polygons.erase(i);
 }
 
 void polygon::editing_drag(int dot_no, int dx, int dy)

@@ -61,8 +61,10 @@ void drawing_mouse_process(int button, int state, int x, int y)
 			return;
 		if (drawing_graphic.graphic_type != POLYGON || drawing_polygon.left_click(x, y))
 			cg_state.changeto(IDLE);
+		return;
 	}
-	else
+	
+	if (button == GLUT_RIGHT_BUTTON)
 	{
 		switch (drawing_state.state)
 		{
@@ -70,7 +72,22 @@ void drawing_mouse_process(int button, int state, int x, int y)
 			cg_state.changeto(IDLE);
 			break;
 		case DRAW_DRAWING:
-			//drawing_state.changeto(DRAW_WAITING);
+			if (drawing_graphic.graphic_type == POLYGON && drawing_graphic.can_polygon->lines.size() > 1)
+				drawing_graphic.can_polygon->lines.pop_back();
+			else {
+				switch (drawing_graphic.graphic_type) {
+				case LINE:
+					drawing_graphic.can_line->del();
+					break;
+				case ELLIPSE:
+					drawing_graphic.can_ellipse->del();
+					break;
+				case POLYGON:
+					drawing_graphic.can_polygon->del();
+					break;
+				}
+				drawing_state.changeto(DRAW_WAITING);
+			}
 			return;
 		}
 	}

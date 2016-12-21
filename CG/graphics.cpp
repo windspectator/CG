@@ -193,6 +193,8 @@ void polygon::editing_move(int dx, int dy)
 		i.b.x += dx;
 		i.b.y += dy;
 	}
+
+	refresh_border();
 }
 
 void polygon::editing_show_all_ins()

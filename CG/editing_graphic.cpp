@@ -146,7 +146,7 @@ void Editing_graphic::moveto(int x, int y)
 					set(can_polygon->ins[_D_RIGHT_UP], x, y);
 			break;
 		case _TYPE_INS_MOVE:
-
+			can_polygon->editing_move(x - lastx, y - lasty);
 			
 			//	TODO
 		}

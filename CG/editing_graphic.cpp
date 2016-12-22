@@ -3,6 +3,8 @@
 using namespace std;
 
 extern Memory memory;
+extern Cg_state cg_state;
+extern list<ellipse>::iterator idle_ins;
 
 Editing_graphic editing_graphic;
 
@@ -20,6 +22,13 @@ void Editing_graphic::set(list<ellipse>::iterator chosen_ins, int x, int y)
 		while (f->no != ins->father)
 			f++;
 		can_polygon = f;
+
+		if (ins->type == _TYPE_DELETE) {
+			can_polygon->del();
+			cg_state.changeto(IDLE);
+			idle_ins = memory.ellipses.end();
+			return;
+		}
 
 		can_polygon->editing_hide_all_ins();
 		ins->isdisplayed = true;
@@ -47,6 +56,9 @@ void Editing_graphic::set(list<ellipse>::iterator chosen_ins, int x, int y)
 			break;
 		case _TYPE_INS_RIGHT_DOWN:
 			can_polygon->ins[_D_LEFT_UP]->isdisplayed = true;
+			break;
+		case _TYPE_ROTATE:
+			can_polygon->ins[_D_CENTER]->isdisplayed = true;
 			break;
 		}
 

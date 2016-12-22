@@ -1,4 +1,6 @@
 #include "memory.h"
+#include <iostream>
+using namespace std;
 
 Memory memory;
 

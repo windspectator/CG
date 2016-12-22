@@ -27,7 +27,7 @@ void line::del()
 
 void ellipse::drawing_modify(dot & d)
 {
-	a = round(sqrt((d.x - o.x) * (d.x - o.x) + (d.y - o.y) * (d.y - o.y)));
+	a = (int)round(sqrt((d.x - o.x) * (d.x - o.x) + (d.y - o.y) * (d.y - o.y)));
 	b = a;
 }
 
@@ -42,63 +42,25 @@ void ellipse::del()
 polygon::polygon(dot d)
 {
 	lines.push_back(line(d));
-	borders.resize(4);
-
-	for (int i = 0; i < 9; i++) {
-		memory.ellipses.push_back(ellipse(d, _INS_R, _INS_R));
-		ins.push_back(prev(memory.ellipses.end()));
-		ins[i]->isdisplayed = false;
-		ins[i]->father_type = POLYGON;
-		ins[i]->father = memory.sum_polygon;
-		switch (i) {
-		case _D_LEFT:
-			ins[i]->type_convert_to(_TYPE_INS_LEFT);
-			break;
-		case _D_RIGHT:
-			ins[i]->type_convert_to(_TYPE_INS_RIGHT);
-			break;
-		case _D_UP:
-			ins[i]->type_convert_to(_TYPE_INS_UP);
-			break;
-		case _D_DOWN:
-			ins[i]->type_convert_to(_TYPE_INS_DOWN);
-			break;
-		case _D_CENTER:
-			ins[i]->type_convert_to(_TYPE_INS_MOVE);
-			break;
-		case _D_LEFT_UP:
-			ins[i]->type_convert_to(_TYPE_INS_LEFT_UP);
-			break;
-		case _D_RIGHT_UP:
-			ins[i]->type_convert_to(_TYPE_INS_RIGHT_UP);
-			break;
-		case _D_LEFT_DOWN:
-			ins[i]->type_convert_to(_TYPE_INS_LEFT_DOWN);
-			break;
-		case _D_RIGHT_DOWN:
-			ins[i]->type_convert_to(_TYPE_INS_RIGHT_DOWN);
-			break;
-		}
-	}
 }
 
 void polygon::refresh_border()
 {
-	borders[_D_LEFT] = lines[0].a.x;
-	borders[_D_RIGHT] = lines[0].a.x;
-	borders[_D_UP] = lines[0].a.y;
-	borders[_D_DOWN] = lines[0].a.y;
+	borders[_D_LEFT] = (int)lines[0].a.x;
+	borders[_D_RIGHT] = (int)lines[0].a.x;
+	borders[_D_UP] = (int)lines[0].a.y;
+	borders[_D_DOWN] = (int)lines[0].a.y;
 	for (auto &i : lines) {
 		if (i.a.x < borders[_D_LEFT])
-			borders[_D_LEFT] = i.a.x;
+			borders[_D_LEFT] = (int)i.a.x;
 		else
 			if (i.a.x > borders[_D_RIGHT])
-				borders[_D_RIGHT] = i.a.x;
+				borders[_D_RIGHT] = (int)i.a.x;
 		if (i.a.y > borders[_D_UP])
-			borders[_D_UP] = i.a.y;
+			borders[_D_UP] = (int)i.a.y;
 		else
 			if (i.a.y < borders[_D_DOWN])
-				borders[_D_DOWN] = i.a.y;
+				borders[_D_DOWN] = (int)i.a.y;
 	}
 
 	int center_x = (borders[_D_LEFT] + borders[_D_RIGHT]) / 2;
@@ -122,6 +84,10 @@ void polygon::refresh_border()
 	ins[_D_LEFT_DOWN]->o.y = borders[_D_DOWN];
 	ins[_D_RIGHT_DOWN]->o.x = borders[_D_RIGHT];
 	ins[_D_RIGHT_DOWN]->o.y = borders[_D_DOWN];
+	ins[_D_UP_UP]->o.x = center_x;
+	ins[_D_UP_UP]->o.y = borders[_D_UP] + 2 * _INS_R;
+	ins[_D_RIGHT_UP_UP]->o.x = borders[_D_RIGHT];
+	ins[_D_RIGHT_UP_UP]->o.y = borders[_D_UP] + 2 * _INS_R;
 
 	for (unsigned i = 0; i < dot_ins.size(); i++)
 		dot_ins[i]->o = lines[i].a;
@@ -151,6 +117,50 @@ void polygon::drawing_complete()
 		current_ins->father_type = POLYGON;
 		current_ins->father = no;
 		current_ins->dot_no = dot_ins.size() - 1;
+	}
+
+	borders.resize(4);
+	for (int i = 0; i < 11; i++) {
+		memory.ellipses.push_back(ellipse(dot(0, 0), _INS_R, _INS_R));
+		ins.push_back(prev(memory.ellipses.end()));
+		ins[i]->isdisplayed = false;
+		ins[i]->father_type = POLYGON;
+		ins[i]->father = no;
+		switch (i) {
+		case _D_LEFT:
+			ins[i]->type_convert_to(_TYPE_INS_LEFT);
+			break;
+		case _D_RIGHT:
+			ins[i]->type_convert_to(_TYPE_INS_RIGHT);
+			break;
+		case _D_UP:
+			ins[i]->type_convert_to(_TYPE_INS_UP);
+			break;
+		case _D_DOWN:
+			ins[i]->type_convert_to(_TYPE_INS_DOWN);
+			break;
+		case _D_CENTER:
+			ins[i]->type_convert_to(_TYPE_INS_MOVE);
+			break;
+		case _D_LEFT_UP:
+			ins[i]->type_convert_to(_TYPE_INS_LEFT_UP);
+			break;
+		case _D_RIGHT_UP:
+			ins[i]->type_convert_to(_TYPE_INS_RIGHT_UP);
+			break;
+		case _D_LEFT_DOWN:
+			ins[i]->type_convert_to(_TYPE_INS_LEFT_DOWN);
+			break;
+		case _D_RIGHT_DOWN:
+			ins[i]->type_convert_to(_TYPE_INS_RIGHT_DOWN);
+			break;
+		case _D_UP_UP:
+			ins[i]->type_convert_to(_TYPE_ROTATE);
+			break;
+		case _D_RIGHT_UP_UP:
+			ins[i]->type_convert_to(_TYPE_DELETE);
+			break;
+		}
 	}
 
 	refresh_border();

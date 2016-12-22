@@ -6,9 +6,9 @@ using namespace std;
 enum { LINE, ELLIPSE, POLYGON };
 enum { _TYPE_G, _TYPE_INS_CREATE, _TYPE_INS_LEFT, _TYPE_INS_RIGHT, _TYPE_INS_UP, _TYPE_INS_DOWN, _TYPE_INS_DOT, 
 		_TYPE_INS_MOVE, _TYPE_INS_LEFT_UP, _TYPE_INS_RIGHT_UP, _TYPE_INS_LEFT_DOWN, _TYPE_INS_RIGHT_DOWN, _TYPE_ROTATE,
-		_TYPE_DELETE };
+		_TYPE_DELETE, _TYPE_INS_ROTATE_CENTER };
 enum { _D_LEFT, _D_RIGHT, _D_UP, _D_DOWN, _D_CENTER, _D_LEFT_UP, _D_RIGHT_UP, _D_LEFT_DOWN, _D_RIGHT_DOWN, _D_UP_UP,
-		_D_RIGHT_UP_UP };
+		_D_RIGHT_UP_UP, _D_CENTER_ASIDE };
 
 class dot
 {
@@ -21,12 +21,26 @@ public:
 		x(a), y(b) {}
 };
 
+class int_dot
+{
+public:
+	int x;
+	int y;
+	int_dot() :
+		x(0), y(0) {}
+	int_dot(int a, int b) :
+		x(a), y(b) {}
+	int_dot(dot d) :
+		x(d.x), y(d.y) {}
+};
+
 class graphic
 {
 public:
 	int no;
 	int type;
 	bool isdisplayed = true;
+	bool isfilt;
 
 	void type_convert_to(int new_type);
 };
@@ -84,6 +98,7 @@ public:
 	void editing_drag(int dot_no, int dx, int dy);
 	void editing_resize(dot a, dot b, dot c);
 	void editing_move(int dx, int dy);
+	void editing_rotate(dot b, dot c);
 	void editing_show_all_ins();
 	void editing_hide_all_ins();
 };

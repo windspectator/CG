@@ -58,7 +58,8 @@ void Editing_graphic::set(list<ellipse>::iterator chosen_ins, int x, int y)
 			can_polygon->ins[_D_LEFT_UP]->isdisplayed = true;
 			break;
 		case _TYPE_ROTATE:
-			can_polygon->ins[_D_CENTER]->isdisplayed = true;
+			can_polygon->ins[_D_CENTER_ASIDE]->o = can_polygon->ins[_D_CENTER]->o;
+			can_polygon->ins[_D_CENTER_ASIDE]->isdisplayed = true;
 			break;
 		}
 
@@ -189,6 +190,11 @@ void Editing_graphic::moveto(int x, int y)
 			break;
 		case _TYPE_INS_MOVE:
 			can_polygon->editing_move(x - lastx, y - lasty);
+			break;
+		case _TYPE_ROTATE:
+			if (lastx == x && lasty == y)
+				return;
+			can_polygon->editing_rotate(dot(lastx, lasty), dot(x, y));
 			break;
 		}
 	}

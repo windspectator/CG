@@ -6,6 +6,7 @@
 using namespace std;
 
 extern Memory memory;
+double cosine_thoerem(dot a, dot b, dot c);
 
 void graphic::type_convert_to(int new_type)
 {
@@ -120,7 +121,7 @@ void polygon::drawing_complete()
 	}
 
 	borders.resize(4);
-	for (int i = 0; i < 11; i++) {
+	for (int i = 0; i < 12; i++) {
 		memory.ellipses.push_back(ellipse(dot(0, 0), _INS_R, _INS_R));
 		ins.push_back(prev(memory.ellipses.end()));
 		ins[i]->isdisplayed = false;
@@ -159,6 +160,9 @@ void polygon::drawing_complete()
 			break;
 		case _D_RIGHT_UP_UP:
 			ins[i]->type_convert_to(_TYPE_DELETE);
+			break;
+		case _D_CENTER_ASIDE:
+			ins[i]->type_convert_to(_TYPE_INS_ROTATE_CENTER);
 			break;
 		}
 	}
@@ -231,10 +235,27 @@ void polygon::editing_move(int dx, int dy)
 	refresh_border();
 }
 
+void polygon::editing_rotate(dot b, dot c)
+{
+	dot a = ins[_D_CENTER_ASIDE]->o;
+	double cos¦È = cosine_thoerem(a, b, c);
+	double sin¦È = pow(1 - cos¦È * cos¦È, 0.5);
+		 
+	for (auto &i : lines) {
+		double new_ax = a.x + (i.a.x - a.x) * cos¦È - (i.a.y - a.y) * sin¦È;
+		double new_bx = a.x + (i.b.x - a.x) * cos¦È - (i.b.y - a.y) * sin¦È;
+		i.a.y = a.y + (i.a.x - a.x) * sin¦È + (i.a.y - a.y) * cos¦È;
+		i.b.y = a.y + (i.b.x - a.x) * sin¦È + (i.b.y - a.y) * cos¦È;
+		i.a.x = new_ax;
+		i.b.x = new_bx;
+	}
+}
+
 void polygon::editing_show_all_ins()
 {
 	for (auto &i : ins)
-		i->isdisplayed = true;
+		if (i->type != _TYPE_INS_ROTATE_CENTER)
+			i->isdisplayed = true;
 	for (auto &i : dot_ins)
 		i->isdisplayed = true;
 }

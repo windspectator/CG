@@ -72,7 +72,15 @@ void main(int argc, char *argv[])
 	glutMouseFunc(process_mouse);
 	glutReshapeFunc(process_reshape);
 
-	memory.add_graphic(ellipse({ 200, 300 }, 100, 100));
+	memory.add_graphic(polygon({ 300, 200 }));
+	memory.polygons.begin()->drawing_modify(dot(400, 300));
+	memory.polygons.begin()->drawing_add_line();
+	memory.polygons.begin()->drawing_modify(dot(300, 400));
+	memory.polygons.begin()->drawing_add_line();
+	memory.polygons.begin()->drawing_modify(dot(100, 300));
+	memory.polygons.begin()->drawing_add_line();
+	memory.polygons.begin()->drawing_complete();
+	memory.polygons.begin()->isfilt = true;
 
 	init();
 

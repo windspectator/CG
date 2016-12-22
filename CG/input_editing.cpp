@@ -25,6 +25,8 @@ void editing_mouse_process(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON) {
 		if (state == GLUT_UP) {
+			if (editing_graphic.ins->type == _TYPE_ROTATE)
+				editing_graphic.can_polygon->refresh_border();
 			editing_state.changeto(EDIT_WAITING);
 			editing_graphic.show_ins();
 			return;

@@ -1,6 +1,9 @@
 #include <GL/glut.h>
 #include <cmath>
+#include <algorithm>
 #include "graphics.h"
+#include <iostream>
+using namespace std;
 
 extern int window_width;
 extern int window_height;
@@ -113,27 +116,28 @@ void polygon::display()
 	if (!isdisplayed)
 		return;
 
-	vector<vector<int>> screen;
-	for (int i = 0; i < window_width; i++)
-		screen.push_back(vector<int>());
-	for (auto &i : screen)
-		i.resize(window_height, _EMPTY);
+	vector<vector<int>> intersections;
+	for (int i = 0; i < window_height; i++)
+		intersections.push_back(vector<int>());
 
 	glBegin(GL_POINTS);
 
 	int_dot begin, end;
+	int_dot a, b;
 	for (auto i = lines.begin(); i != lines.end(); i++) {
-		if (i->b.x - i->a.x + i->b.y - i->a.y < 0) {
-			begin = i->b;
-			end = i->a;
+		a = i->a;
+		b = i->b;
+		if (b.x - a.x + b.y - a.y < 0) {
+			begin = b;
+			end = a;
 		}
 		else {
-			begin = i->a;
-			end = i->b;
+			begin = a;
+			end = b;
 		}
 
 		if (end.x - begin.x >= abs(begin.y - end.y)) {
-			bool fill_is_through = (begin.y == end.y) ? false : true;
+			int last_y = begin.y;
 			int dx = end.x - begin.x;
 			int dy = abs(end.y - begin.y);
 			int d = 2 * dy - dx;
@@ -141,13 +145,21 @@ void polygon::display()
 			int dirt_y = (end.y >= begin.y) ? 1 : -1;
 			for (int x = begin.x; x < end.x; x++) {
 				glVertex2i(x, y);
-				if (x != begin.x && 0 <= x && x < window_width && 0 <= y && y < window_height && fill_is_through) 
-					screen[x][y] = (screen[x][y] == _EDGE_THROUGH) ? _EDGE_BYPASS : _EDGE_THROUGH;
+				if (0 <= y && y < window_height && y != last_y && y != end.y) {
+					intersections[y].push_back(x);
+					last_y = y;
+				}
 				if (d > 0) {
 					y += dirt_y;
 					d -= dx;
 				}
 				d += dy;
+			}
+			intersections[a.y].push_back(a.x);
+			if (0 <= b.y && b.y < window_height) {
+				auto next_line = (i == prev(lines.end())) ? lines.begin() : next(i);
+				if ((b.y - a.y) * ((int)next_line->b.y - (int)next_line->a.y) < 0)
+					intersections[b.y].push_back(b.x);
 			}
 		}
 		else {
@@ -159,57 +171,43 @@ void polygon::display()
 			int dirt_x = (end.x >= begin.x) ? 1 : -1;
 			for (int y = begin.y; y < end.y; y++) {
 				glVertex2i(x, y);
-				if (x != begin.x && 0 <= x && x < window_width && 0 <= y && y < window_height&& !fill_is_through)
-					screen[x][y] = (screen[x][y] == _EDGE_THROUGH) ? _EDGE_BYPASS : _EDGE_THROUGH;
+				if (0 <= y && y < window_height && y != begin.y)
+					intersections[y].push_back(x);
 				if (d > 0) {
 					x += dirt_x;
 					d -= dy;
 				}
 				d += dx;
 			}
+			intersections[a.y].push_back(a.x);
+			if (0 <= b.y && b.y < window_height) {
+				auto next_line = (i == prev(lines.end())) ? lines.begin() : next(i);
+				if ((b.y - a.y) * ((int)next_line->b.y - (int)next_line->a.y) < 0)
+					intersections[b.y].push_back(b.x);
+			}
 		}
 
 		glVertex2i(end.x, end.y);
-		if (0 <= end.x && end.x < window_width && 0 <= end.y && end.y < window_height) {
-			auto next_line = (i == prev(lines.end())) ? lines.begin() : next(i);
-			double product = (next_line->b.y - next_line->a.y)*(i->b.y - i->a.y);
-			if (product > 0)
-				screen[end.x][end.y] = _VERTEX_THROUGH;
-			else if (product < 0)
-				screen[end.x][end.y] = _VERTEX_BYPASS;
-			else {
-				if (next_line->b.y - next_line->a.y < 0 || i->b.y - i->a.y > 0)
-					screen[end.x][end.y] = _VERTEX_THROUGH;
-				else
-					screen[end.x][end.y] = _VERTEX_BYPASS;
-			}
-		}
 	}
 
 	if (!isfilt) {
 		glEnd();
 		return;
 	}
-
 	
 	for (int j = 0; j < window_height; j++) {
-		bool is_on = false;
-		for (int i = 0; i < window_width; i++) {
-			switch (screen[i][j])
-			{
-			case _EMPTY:
-				if (is_on)
-					glVertex2i(i, j);
-				break;
-			case _VERTEX_THROUGH:
-				is_on = !is_on;
-				break;
-			case _EDGE_THROUGH:
-				is_on = !is_on;
-				break;
-			default:
-				break;
-			}
+		sort(intersections[j].begin(), intersections[j].end());
+		if (intersections[j].size() % 2 == 1) {
+			cout << "error" << endl;
+			for (auto &i : lines)
+				cout << i.a.x << " " << i.a.y << " " << i.b.x << " " << i.b.y << " " << endl;
+		}
+	}
+	
+	for (int j = 0; j < window_height; j++) {
+		for (int k = 0; k < intersections[j].size(); k += 2) {
+			for (int i = intersections[j][k]; i < intersections[j][k + 1]; i++)
+				glVertex2i(i, j);
 		}
 	}
 

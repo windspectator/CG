@@ -42,6 +42,8 @@ void ellipse::del()
 
 polygon::polygon(dot d)
 {
+	isdisplayed = true;
+	isfilt = false;
 	lines.push_back(line(d));
 }
 

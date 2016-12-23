@@ -39,7 +39,7 @@ class graphic
 public:
 	int no;
 	int type;
-	bool isdisplayed = true;
+	bool isdisplayed;
 	bool isfilt;
 
 	void type_convert_to(int new_type);

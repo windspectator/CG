@@ -6,9 +6,9 @@ using namespace std;
 enum { LINE, ELLIPSE, POLYGON };
 enum { _TYPE_G, _TYPE_INS_CREATE, _TYPE_INS_LEFT, _TYPE_INS_RIGHT, _TYPE_INS_UP, _TYPE_INS_DOWN, _TYPE_INS_DOT, 
 		_TYPE_INS_MOVE, _TYPE_INS_LEFT_UP, _TYPE_INS_RIGHT_UP, _TYPE_INS_LEFT_DOWN, _TYPE_INS_RIGHT_DOWN, _TYPE_ROTATE,
-		_TYPE_DELETE, _TYPE_INS_ROTATE_CENTER };
+		_TYPE_DELETE, _TYPE_INS_ROTATE_CENTER, _TYPE_INS_FILL };
 enum { _D_LEFT, _D_RIGHT, _D_UP, _D_DOWN, _D_CENTER, _D_LEFT_UP, _D_RIGHT_UP, _D_LEFT_DOWN, _D_RIGHT_DOWN, _D_UP_UP,
-		_D_RIGHT_UP_UP, _D_CENTER_ASIDE };
+		_D_RIGHT_UP_UP, _D_CENTER_ASIDE, _D_LEFT_UP_UP };
 
 class dot
 {
@@ -99,6 +99,7 @@ public:
 	void editing_resize(dot a, dot b, dot c);
 	void editing_move(int dx, int dy);
 	void editing_rotate(dot b, dot c);
+	void editing_fill();
 	void editing_show_all_ins();
 	void editing_hide_all_ins();
 };

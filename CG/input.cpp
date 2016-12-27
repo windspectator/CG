@@ -44,6 +44,9 @@ void process_no_motion(int x, int y)
 	case EDITING:
 		editing_motion_process(x, y);
 		break;
+	case CUTTING:
+		cutting_motion_process(x, y);
+		break;
 	}
 	glutPostRedisplay();
 }
@@ -61,6 +64,10 @@ void process_mouse(int button, int state, int x, int y)
 		break;
 	case EDITING:
 		editing_mouse_process(button, state, x, y);
+		break;
+	case CUTTING:
+		cutting_mouse_process(button, state, x, y);
+		break;
 	}
 	glutPostRedisplay();
 }

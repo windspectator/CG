@@ -93,6 +93,8 @@ void polygon::refresh_border()
 	ins[_D_RIGHT_UP_UP]->o.y = borders[_D_UP] + 2 * _INS_R;
 	ins[_D_LEFT_UP_UP]->o.x = borders[_D_LEFT];
 	ins[_D_LEFT_UP_UP]->o.y = borders[_D_UP] + 2 * _INS_R;
+	ins[_D_DOWN_DOWN]->o.x = center_x;
+	ins[_D_DOWN_DOWN]->o.y = borders[_D_DOWN] - 2 * _INS_R;
 
 	for (unsigned i = 0; i < dot_ins.size(); i++)
 		dot_ins[i]->o = lines[i].a;
@@ -125,7 +127,7 @@ void polygon::drawing_complete()
 	}
 
 	borders.resize(4);
-	for (int i = 0; i < 13; i++) {
+	for (int i = 0; i < 14; i++) {
 		memory.ellipses.push_back(ellipse(dot(0, 0), _INS_R, _INS_R));
 		ins.push_back(prev(memory.ellipses.end()));
 		ins[i]->isdisplayed = false;
@@ -170,6 +172,9 @@ void polygon::drawing_complete()
 			break;
 		case _D_LEFT_UP_UP:
 			ins[i]->type_convert_to(_TYPE_INS_FILL);
+			break;
+		case _D_DOWN_DOWN:
+			ins[i]->type_convert_to(_TYPE_INS_CUT);
 			break;
 		}
 	}

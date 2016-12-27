@@ -117,6 +117,7 @@
     <ClCompile Include="editing_graphic.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="input_cutting.cpp" />
     <ClCompile Include="input_drawing.cpp" />
     <ClCompile Include="input_editing.cpp" />
     <ClCompile Include="input_idle.cpp" />
@@ -128,6 +129,7 @@
     <ClInclude Include="conf.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="input_cutting.h" />
     <ClInclude Include="input_drawing.h" />
     <ClInclude Include="input_editing.h" />
     <ClInclude Include="memory.h" />

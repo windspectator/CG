@@ -25,6 +25,9 @@
     <Filter Include="Resource Files\idle">
       <UniqueIdentifier>{12035d25-bdec-40ef-bcff-a7b32553ecf9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\cut">
+      <UniqueIdentifier>{55e420d8-3e66-4e78-8a9a-54ceed5473cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -66,6 +69,9 @@
     <ClCompile Include="input_editing.cpp">
       <Filter>Resource Files\edit</Filter>
     </ClCompile>
+    <ClCompile Include="input_cutting.cpp">
+      <Filter>Resource Files\cut</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="conf.h">
@@ -87,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="input_editing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input_cutting.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

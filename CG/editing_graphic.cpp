@@ -1,10 +1,13 @@
 #include "input_editing.h"
+#include "input_cutting.h"
 #include <iostream>
 using namespace std;
 
 extern Memory memory;
 extern Cg_state cg_state;
 extern list<ellipse>::iterator idle_ins;
+extern Cutting_graphic cutting_graphic;
+extern Editing_state editing_state;
 
 Editing_graphic editing_graphic;
 
@@ -63,6 +66,13 @@ void Editing_graphic::set(list<ellipse>::iterator chosen_ins, int x, int y)
 			break;
 		case _TYPE_INS_FILL:
 			can_polygon->editing_fill();
+			break;
+		case _TYPE_INS_CUT:
+			ins->isdisplayed = false;
+			editing_state.changeto(EDIT_WAITING);
+			cutting_graphic.cut_polygon = editing_graphic.can_polygon;
+			cutting_graphic.state = CUT_WAITING;
+			cg_state.changeto(CUTTING);
 			break;
 		}
 

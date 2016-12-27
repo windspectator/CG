@@ -3,7 +3,7 @@
 #include <list>
 using namespace std;
 
-enum { LINE, ELLIPSE, POLYGON };
+enum { LINE, ELLIPSE, POLYGON, CURVE };
 enum { _TYPE_G, _TYPE_INS_CREATE, _TYPE_INS_LEFT, _TYPE_INS_RIGHT, _TYPE_INS_UP, _TYPE_INS_DOWN, _TYPE_INS_DOT, 
 		_TYPE_INS_MOVE, _TYPE_INS_LEFT_UP, _TYPE_INS_RIGHT_UP, _TYPE_INS_LEFT_DOWN, _TYPE_INS_RIGHT_DOWN, _TYPE_ROTATE,
 		_TYPE_DELETE, _TYPE_INS_ROTATE_CENTER, _TYPE_INS_FILL, _TYPE_INS_CUT };
@@ -76,6 +76,20 @@ public:
 	int father_type;
 	int father;
 	int dot_no;
+};
+
+
+class curve : public graphic
+{
+public:
+	vector<dot> dots;
+	curve(dot d);
+
+	void display();
+	void drawing_add_dot(dot d);
+	void drawing_modify(dot d);
+
+	void del();
 };
 
 class polygon : public graphic

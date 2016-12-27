@@ -32,6 +32,7 @@ void init_nemu()
 	glutAddMenuEntry("line", LINE);
 	glutAddMenuEntry("ellipse", ELLIPSE);
 	glutAddMenuEntry("polygon", POLYGON);
+	glutAddMenuEntry("curve", CURVE);
 
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }

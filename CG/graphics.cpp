@@ -40,6 +40,31 @@ void ellipse::del()
 	memory.ellipses.erase(i);
 }
 
+curve::curve(dot d)
+{
+	isdisplayed = true;
+	dots.push_back(d);
+	dots.push_back(d);
+}
+
+void curve::drawing_add_dot(dot d)
+{
+	dots.push_back(d);
+}
+
+void curve::drawing_modify(dot d)
+{
+	*prev(dots.end()) = d;
+}
+
+void curve::del()
+{
+	auto i = memory.curves.begin();
+	while (i->no != no)
+		i++;
+	memory.curves.erase(i);
+}
+
 polygon::polygon(dot d)
 {
 	isdisplayed = true;

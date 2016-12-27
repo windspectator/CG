@@ -59,7 +59,11 @@ void drawing_mouse_process(int button, int state, int x, int y)
 	{
 		if (drawing_last_left_click.x == x && drawing_last_left_click.y == y)
 			return;
-		if (drawing_graphic.graphic_type != POLYGON || drawing_polygon.left_click(x, y))
+		if (drawing_graphic.graphic_type == CURVE) {
+			drawing_graphic.can_curve->drawing_add_dot({ x, y });
+			return;
+		}
+		if ((drawing_graphic.graphic_type != POLYGON || drawing_polygon.left_click(x, y)))
 			cg_state.changeto(IDLE);
 		return;
 	}
@@ -72,8 +76,14 @@ void drawing_mouse_process(int button, int state, int x, int y)
 			cg_state.changeto(IDLE);
 			break;
 		case DRAW_DRAWING:
-			if (drawing_graphic.graphic_type == POLYGON && drawing_graphic.can_polygon->lines.size() > 1)
+			if (drawing_graphic.graphic_type == POLYGON && drawing_graphic.can_polygon->lines.size() > 1) {
 				drawing_graphic.can_polygon->lines.pop_back();
+				return;
+			}
+			if (drawing_graphic.graphic_type == CURVE && drawing_graphic.can_curve->dots.size() > 1) {
+				cg_state.changeto(IDLE);
+				return;
+			}
 			else {
 				switch (drawing_graphic.graphic_type) {
 				case LINE:
@@ -84,6 +94,9 @@ void drawing_mouse_process(int button, int state, int x, int y)
 					break;
 				case POLYGON:
 					drawing_graphic.can_polygon->del();
+					break;
+				case CURVE:
+					drawing_graphic.can_curve->del();
 					break;
 				}
 				drawing_state.changeto(DRAW_WAITING);

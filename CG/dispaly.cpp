@@ -111,6 +111,29 @@ void ellipse::display()
 	glEnd();
 }
 
+
+void curve::display()
+{
+	if (!isdisplayed)
+		return;
+
+	glBegin(GL_POINTS);
+
+	for (double t = 0; t <= 1; t += 0.001) {
+		vector<dot> t_dots(dots);
+		while (t_dots.size() > 1) {
+			for (int i = 0; i < t_dots.size() - 1; i++) {
+				t_dots[i].x = t*t_dots[i].x + (1.0 - t)*t_dots[i + 1].x;
+				t_dots[i].y = t*t_dots[i].y + (1.0 - t)*t_dots[i + 1].y;
+			}
+			t_dots.pop_back();
+		}
+		glVertex2i((int)t_dots[0].x, (int)t_dots[0].y);
+	}
+
+	glEnd();
+}
+
 void polygon::display()
 {
 	if (!isdisplayed)

@@ -18,6 +18,11 @@ void Drawing_graphic::add_graphic(int x, int y)
 	case POLYGON:
 		memory.add_graphic(polygon({ x, y }));
 		can_polygon = prev(memory.polygons.end());
+		break;
+	case CURVE:
+		memory.add_graphic(curve({ x, y }));
+		can_curve = prev(memory.curves.end());
+		break;
 	}
 }
 
@@ -32,6 +37,9 @@ void Drawing_graphic::modify(dot d)
 		break;
 	case POLYGON:
 		can_polygon->drawing_modify(d);
+		break;
+	case CURVE:
+		can_curve->drawing_modify(d);
 	}
 }
 

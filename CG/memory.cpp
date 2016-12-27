@@ -25,6 +25,13 @@ void Memory::add_graphic(polygon & g)
 	polygons.push_back(g);
 }
 
+void Memory::add_graphic(curve & g)
+{
+	g.no = sum_curve;
+	sum_curve++;
+	curves.push_back(g);
+}
+
 void Memory::display()
 {
 	for (auto &i : lines)
@@ -32,5 +39,7 @@ void Memory::display()
 	for (auto &i : ellipses)
 		i.display();
 	for (auto &i : polygons)
+		i.display();
+	for (auto &i : curves)
 		i.display();
 }

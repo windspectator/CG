@@ -83,12 +83,21 @@ class curve : public graphic
 {
 public:
 	vector<dot> dots;
+	vector<int> borders;
 	curve(dot d);
+	vector<list<ellipse>::iterator> ins;
+	vector<list<ellipse>::iterator> dot_ins;
 
 	void display();
 	void drawing_add_dot(dot d);
 	void drawing_modify(dot d);
+	void refresh_border();
+	void drawing_complete();
+	void editing_show_all_ins();
+	void editing_hide_all_ins();
 
+	void editing_drag(int dot_no, int dx, int dy);
+	void editing_move(int dx, int dy);
 	void del();
 };
 

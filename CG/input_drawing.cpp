@@ -81,6 +81,7 @@ void drawing_mouse_process(int button, int state, int x, int y)
 				return;
 			}
 			if (drawing_graphic.graphic_type == CURVE && drawing_graphic.can_curve->dots.size() > 1) {
+				drawing_graphic.can_curve->drawing_complete();
 				cg_state.changeto(IDLE);
 				return;
 			}

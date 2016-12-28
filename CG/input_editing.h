@@ -20,6 +20,7 @@ public:
 	list<line>::iterator can_line;
 	list<ellipse>::iterator can_ellipse;
 	list<polygon>::iterator can_polygon;
+	list<curve>::iterator can_curve;
 	list<ellipse>::iterator ins;
 	int lastx;
 	int lasty;

@@ -18,7 +18,26 @@ void Editing_graphic::set(list<ellipse>::iterator chosen_ins, int x, int y)
 	lastx = x;
 	lasty = y;
 
+	list<curve>::iterator c;
+
 	switch (ins->father_type) {
+	case CURVE:
+		graphic_type = CURVE;
+		c = memory.curves.begin();
+		while (c->no != ins->father)
+			c++;
+		can_curve = c;
+
+		if (ins->type == _TYPE_DELETE) {
+			can_curve->del();
+			cg_state.changeto(IDLE);
+			idle_ins = memory.ellipses.end();
+			return;
+		}
+
+		can_curve->editing_hide_all_ins();
+		ins->isdisplayed = true;
+		break;
 	case POLYGON:
 		graphic_type = POLYGON;
 		list<polygon>::iterator f = memory.polygons.begin();
@@ -83,6 +102,16 @@ void Editing_graphic::set(list<ellipse>::iterator chosen_ins, int x, int y)
 void Editing_graphic::moveto(int x, int y)
 {
 	switch (graphic_type) {
+	case CURVE:
+		switch (ins->type) {
+		case _TYPE_INS_DOT:
+			can_curve->editing_drag(ins->dot_no, x - lastx, y - lasty);
+			break;
+		case _TYPE_INS_MOVE:
+			can_curve->editing_move(x - lastx, y - lasty);
+			break;
+		}
+		break;
 	case POLYGON:
 		dot a, b, c;
 		switch (ins->type) {
@@ -221,6 +250,9 @@ void Editing_graphic::show_ins()
 {
 	switch (graphic_type)
 	{
+	case CURVE:
+		can_curve->editing_show_all_ins();
+		break;
 	case POLYGON:
 		can_polygon->editing_show_all_ins();
 		break;
@@ -231,6 +263,9 @@ void Editing_graphic::hide_ins()
 {
 	switch (graphic_type)
 	{
+	case CURVE:
+		can_curve->editing_hide_all_ins();
+		break;
 	case POLYGON:
 		can_polygon->editing_hide_all_ins();
 		break;

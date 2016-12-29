@@ -69,9 +69,9 @@ dot Cutting_graphic::get_intersection(line & l)
 
 	if (l.a.y == l.b.y) {
 		if ((l.a.x > l.b.x && isin(l.a)) || (l.a.x < l.b.x && isin(l.b)))
-			return dot(cutting_rectangle->borders[_D_RIGHT], l.a.y);
-		else
 			return dot(cutting_rectangle->borders[_D_LEFT], l.a.y);
+		else
+			return dot(cutting_rectangle->borders[_D_RIGHT], l.a.y);
 	}
 
 	double k = (l.b.y - l.a.y) / (l.b.x - l.a.x);
@@ -113,6 +113,7 @@ void Cutting_graphic::cut()
 	}
 
 	if (dots.size() == 0) {
+		cutting_graphic.cutting_rectangle->del();
 		cg_state.changeto(EDITING);
 		return;
 	}

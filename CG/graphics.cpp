@@ -13,31 +13,193 @@ void graphic::type_convert_to(int new_type)
 	type = new_type;
 }
 
+line::line(dot d, bool isp) :
+	a(d), b(d)
+{
+	ispartofp = isp;
+	if (isp)
+		return;
+	memory.ellipses.push_back(ellipse(d, _INS_R, _INS_R));
+	ins.push_back(prev(memory.ellipses.end()));
+	ins[0]->isdisplayed = false;
+	ins[0]->father_type = LINE;
+	ins[0]->father = memory.sum_line;
+	ins[0]->dot_no = 0;
+	ins[0]->type_convert_to(_TYPE_INS_DOT);
+
+	memory.ellipses.push_back(ellipse(d, _INS_R, _INS_R));
+	ins.push_back(prev(memory.ellipses.end()));
+	ins[1]->isdisplayed = false;
+	ins[1]->father_type = LINE;
+	ins[1]->father = memory.sum_line;
+	ins[1]->dot_no = 1;
+	ins[1]->type_convert_to(_TYPE_INS_DOT);
+
+	memory.ellipses.push_back(ellipse(dot(0, 0), _INS_R, _INS_R));
+	del_ins = prev(memory.ellipses.end());
+	del_ins->isdisplayed = false;
+	del_ins->father_type = LINE;
+	del_ins->father = memory.sum_line;
+	del_ins->type_convert_to(_TYPE_DELETE);
+}
+
 void line::drawing_modify(dot& d)
 {
 	b = d;
+	if (ispartofp)
+		return;
+	ins[1]->o = d;
+	del_ins->o.x = (b.x > a.x) ? b.x : a.x;
+	del_ins->o.y = ((b.y > a.y) ? b.y : a.y) + 2 * _INS_R;
+}
+
+void line::editing_drag(int dot_no, int dx, int dy)
+{
+	if (dot_no == 0) {
+		a.x += dx;
+		a.y += dy;
+		ins[0]->o = a;
+	}
+	else {
+		b.x += dx;
+		b.y += dy;
+		ins[1]->o = b;
+	}
+	del_ins->o.x = (b.x > a.x) ? b.x : a.x;
+	del_ins->o.y = ((b.y > a.y) ? b.y : a.y) + 2 * _INS_R;
 }
 
 void line::del()
 {
+	for (auto &i : ins)
+		memory.ellipses.erase(i);
+	memory.ellipses.erase(del_ins);
+
 	auto i = memory.lines.begin();
 	while (i->no != no)
 		i++;
 	memory.lines.erase(i);
 }
 
+void line::editing_show_all_ins()
+{
+	ins[0]->isdisplayed = true;
+	ins[1]->isdisplayed = true;
+	del_ins->isdisplayed = true;
+}
+
+void line::editing_hide_all_ins()
+{
+	ins[0]->isdisplayed = false;
+	ins[1]->isdisplayed = false;
+	del_ins->isdisplayed = false;
+}
+
+ellipse::ellipse(dot o) :
+	o(o), a(0), b(0)
+{
+	for (int i = 0; i < 4; i++) {
+		memory.ellipses.push_back(ellipse(o, _INS_R, _INS_R));
+		dot_ins.push_back(prev(memory.ellipses.end()));
+		list<ellipse>::iterator current_ins = *prev(dot_ins.end());
+		current_ins->type_convert_to(_TYPE_INS_DOT);
+		current_ins->isdisplayed = false;
+		current_ins->father_type = ELLIPSE;
+		current_ins->father = memory.sum_ellipse;
+		current_ins->dot_no = dot_ins.size() - 1;
+	}
+
+	memory.ellipses.push_back(ellipse(dot(0, 0), _INS_R, _INS_R));
+	ins.push_back(prev(memory.ellipses.end()));
+	ins[0]->isdisplayed = false;
+	ins[0]->father_type = ELLIPSE;
+	ins[0]->father = memory.sum_ellipse;
+	ins[0]->type_convert_to(_TYPE_INS_MOVE);
+
+	memory.ellipses.push_back(ellipse(dot(0, 0), _INS_R, _INS_R));
+	ins.push_back(prev(memory.ellipses.end()));
+	ins[1]->isdisplayed = false;
+	ins[1]->father_type = ELLIPSE;
+	ins[1]->father = memory.sum_ellipse;
+	ins[1]->type_convert_to(_TYPE_DELETE);
+}
+
 void ellipse::drawing_modify(dot & d)
 {
 	a = (int)round(sqrt((d.x - o.x) * (d.x - o.x) + (d.y - o.y) * (d.y - o.y)));
 	b = a;
+	refresh_border();
 }
 
 void ellipse::del()
 {
+	for (auto &i : ins)
+		memory.ellipses.erase(i);
+	for (auto &i : dot_ins)
+		memory.ellipses.erase(i);
+
 	auto i = memory.ellipses.begin();
 	while (i->no != no)
 		i++;
 	memory.ellipses.erase(i);
+}
+
+void ellipse::editing_drag(int dot_no, int dx, int dy)
+{
+	switch (dot_no) {
+	case 0:
+		o.x += dx / 2.0;
+		a -= dx / 2.0;
+		break;
+	case 1:
+		o.x += dx / 2.0;
+		a += dx / 2.0;
+		break;
+	case 2:
+		o.y += dy / 2.0;
+		b += dy / 2.0;
+		break;
+	case 3:
+		o.y += dy / 2.0;
+		b -= dy / 2.0;
+		break;
+	}
+
+	refresh_border();
+}
+
+void ellipse::editing_move(int dx, int dy)
+{
+	o.x += dx;
+	o.y += dy;
+	refresh_border();
+}
+
+void ellipse::refresh_border()
+{
+	dot_ins[0]->o = dot(o.x - a, o.y);
+	dot_ins[1]->o = dot(o.x + a, o.y);
+	dot_ins[2]->o = dot(o.x, o.y + b);
+	dot_ins[3]->o = dot(o.x, o.y - b);
+
+	ins[0]->o = dot(o.x, o.y);
+	ins[1]->o = dot(o.x + a, o.y + b);
+}
+
+void ellipse::editing_show_all_ins()
+{
+	for (auto &i : ins)
+		i->isdisplayed = true;
+	for (auto &i : dot_ins)
+		i->isdisplayed = true;
+}
+
+void ellipse::editing_hide_all_ins()
+{
+	for (auto &i : ins)
+		i->isdisplayed = false;
+	for (auto &i : dot_ins)
+		i->isdisplayed = false;
 }
 
 curve::curve(dot d)
@@ -168,7 +330,7 @@ polygon::polygon(dot d)
 {
 	isdisplayed = true;
 	isfilt = false;
-	lines.push_back(line(d));
+	lines.push_back(line(d, true));
 }
 
 void polygon::refresh_border()
@@ -232,7 +394,7 @@ void polygon::drawing_modify(dot& d)
 void polygon::drawing_add_line()
 {
 	dot last_dot = prev(lines.end())->b;
-	lines.push_back(line(last_dot));			// add a new line whose a and b are the same as last line's b
+	lines.push_back(line(last_dot, true));			// add a new line whose a and b are the same as last line's b
 }
 
 void polygon::drawing_complete()

@@ -19,8 +19,45 @@ void Editing_graphic::set(list<ellipse>::iterator chosen_ins, int x, int y)
 	lasty = y;
 
 	list<curve>::iterator c;
+	list<line>::iterator l;
+	list<ellipse>::iterator e;
 
 	switch (ins->father_type) {
+	case LINE:
+		graphic_type = LINE;
+		l = memory.lines.begin();
+		while (l->no != ins->father)
+			l++;
+		can_line = l;
+
+		if (ins->type == _TYPE_DELETE) {
+			can_line->del();
+			cg_state.changeto(IDLE);
+			idle_ins = memory.ellipses.end();
+			return;
+		}
+
+		can_line->editing_hide_all_ins();
+		ins->isdisplayed = true;
+		break;
+	case ELLIPSE:
+		graphic_type = ELLIPSE;
+		e = memory.ellipses.begin();
+		while (e->no != ins->father)
+			e++;
+		can_ellipse = e;
+
+		if (ins->type == _TYPE_DELETE) {
+			can_ellipse->del();
+			cg_state.changeto(IDLE);
+			idle_ins = memory.ellipses.end();
+			return;
+		}
+
+		can_ellipse->editing_hide_all_ins();
+		ins->isdisplayed = true;
+		break;
+
 	case CURVE:
 		graphic_type = CURVE;
 		c = memory.curves.begin();
@@ -36,8 +73,9 @@ void Editing_graphic::set(list<ellipse>::iterator chosen_ins, int x, int y)
 		}
 
 		can_curve->editing_hide_all_ins();
-		ins->isdisplayed = true;
+		ins->isdisplayed = true; 
 		break;
+
 	case POLYGON:
 		graphic_type = POLYGON;
 		list<polygon>::iterator f = memory.polygons.begin();
@@ -102,6 +140,19 @@ void Editing_graphic::set(list<ellipse>::iterator chosen_ins, int x, int y)
 void Editing_graphic::moveto(int x, int y)
 {
 	switch (graphic_type) {
+	case LINE:
+		can_line->editing_drag(ins->dot_no, x - lastx, y - lasty);
+		break;
+	case ELLIPSE:
+		switch (ins->type) {
+		case _TYPE_INS_DOT:
+			can_ellipse->editing_drag(ins->dot_no, x - lastx, y - lasty);
+			break;
+		case _TYPE_INS_MOVE:
+			can_ellipse->editing_move(x - lastx, y - lasty);
+			break;
+		}
+		break;
 	case CURVE:
 		switch (ins->type) {
 		case _TYPE_INS_DOT:
@@ -250,6 +301,12 @@ void Editing_graphic::show_ins()
 {
 	switch (graphic_type)
 	{
+	case LINE:
+		can_line->editing_show_all_ins();
+		break;
+	case ELLIPSE:
+		can_ellipse->editing_show_all_ins();
+		break;
 	case CURVE:
 		can_curve->editing_show_all_ins();
 		break;
@@ -263,6 +320,12 @@ void Editing_graphic::hide_ins()
 {
 	switch (graphic_type)
 	{
+	case LINE:
+		can_line->editing_hide_all_ins();
+		break;
+	case ELLIPSE:
+		can_ellipse->editing_hide_all_ins();
+		break;
 	case CURVE:
 		can_curve->editing_hide_all_ins();
 		break;

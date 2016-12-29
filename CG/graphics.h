@@ -45,33 +45,47 @@ public:
 	void type_convert_to(int new_type);
 };
 
+class ellipse;
+
 class line : public graphic
 {
 public:
 	dot a;
 	dot b;
-	line(dot d) :
-		a(d), b(d) {}
-	line(dot a, dot b) :
-		a(a), b(b) {}
+	bool ispartofp;
+	line(dot d, bool isp);
+
+	vector<list<ellipse>::iterator> ins;
+	list<ellipse>::iterator del_ins;
+
 	void display();
 	void drawing_modify(dot& d);
+	void editing_drag(int dot_no, int dx, int dy);
 	void del();
+	void editing_show_all_ins();
+	void editing_hide_all_ins();
 };
 
 class ellipse : public graphic
 {
 public:
 	dot o;
-	int a;
-	int b;
-	ellipse(dot o) :
-		o(o), a(0), b(0) {}
+	double a;
+	double b;
+	ellipse(dot o);
 	ellipse(dot o, int a, int b) :
 		o(o), a(a), b(b) {}
 	void display();
 	void drawing_modify(dot & d);
 	void del();
+
+	vector<list<ellipse>::iterator> ins;
+	vector<list<ellipse>::iterator> dot_ins;
+	void editing_drag(int dot_no, int dx, int dy);
+	void editing_move(int dx, int dy);
+	void refresh_border();
+	void editing_show_all_ins();
+	void editing_hide_all_ins();
 
 	int father_type;
 	int father;

@@ -8,7 +8,7 @@ void Drawing_graphic::add_graphic(int x, int y)
 {
 	switch (graphic_type) {
 	case LINE:
-		memory.add_graphic(line({ x, y }));
+		memory.add_graphic(line({ x, y }, false));
 		can_line = prev(memory.lines.end());
 		break;
 	case ELLIPSE:

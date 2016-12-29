@@ -34,6 +34,34 @@ void editing_mouse_process(int button, int state, int x, int y)
 		else {
 			switch (editing_graphic.graphic_type)
 			{
+			case LINE:
+				for (auto &i : editing_graphic.can_line->ins)
+					if (distance(x, y, i->o.x, i->o.y) < _INS_R) {
+						editing_state.changeto(EDIT_DRAGGING);
+						editing_graphic.set(i, x, y);
+						return;
+					}
+				if (distance(x, y, editing_graphic.can_line->del_ins->o.x, 
+					editing_graphic.can_line->del_ins->o.y) < _INS_R) {
+					editing_state.changeto(EDIT_DRAGGING);
+					editing_graphic.set(editing_graphic.can_line->del_ins, x, y);
+					return;
+				}
+				break;
+			case ELLIPSE:
+				for (auto &i : editing_graphic.can_ellipse->ins)
+					if (distance(x, y, i->o.x, i->o.y) < _INS_R) {
+						editing_state.changeto(EDIT_DRAGGING);
+						editing_graphic.set(i, x, y);
+						return;
+					}
+				for (auto &i : editing_graphic.can_ellipse->dot_ins)
+					if (distance(x, y, i->o.x, i->o.y) < _INS_R) {
+						editing_state.changeto(EDIT_DRAGGING);
+						editing_graphic.set(i, x, y);
+						return;
+					}
+				break;
 			case CURVE:
 				for (auto &i : editing_graphic.can_curve->ins)
 					if (distance(x, y, i->o.x, i->o.y) < _INS_R) {

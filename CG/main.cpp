@@ -33,6 +33,8 @@ void init_nemu()
 	glutAddMenuEntry("ellipse", ELLIPSE);
 	glutAddMenuEntry("polygon", POLYGON);
 	glutAddMenuEntry("curve", CURVE);
+	glutAddMenuEntry("show cube", 4);
+	glutAddMenuEntry("output image", 5);
 
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
@@ -40,7 +42,7 @@ void init_nemu()
 void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(0.0, 0.0, 0.0);
 
 	memory.display();
 

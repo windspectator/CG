@@ -28,6 +28,9 @@
     <Filter Include="Resource Files\cut">
       <UniqueIdentifier>{55e420d8-3e66-4e78-8a9a-54ceed5473cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\addons">
+      <UniqueIdentifier>{96e8de29-1f64-4f2c-a8a4-1d616df60260}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -71,6 +74,12 @@
     </ClCompile>
     <ClCompile Include="input_cutting.cpp">
       <Filter>Resource Files\cut</Filter>
+    </ClCompile>
+    <ClCompile Include="3d.cpp">
+      <Filter>Resource Files\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="output.cpp">
+      <Filter>Resource Files\addons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

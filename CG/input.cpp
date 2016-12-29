@@ -2,12 +2,25 @@
 #include <iostream>
 using namespace std;
 
+void trans_to_3d();
+void output();
 extern Memory memory;
 extern Cg_state cg_state;
 extern int window_height;
 
 void process_menu(int value)
 {
+	if (value == 4) {
+		trans_to_3d();
+		cg_state.changeto(_3D);
+		return;
+	}
+
+	if (value == 5) {
+		output();
+		return;
+	}
+
 	start_drawing(value);
 }
 

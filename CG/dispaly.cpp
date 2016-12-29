@@ -111,7 +111,6 @@ void ellipse::display()
 	glEnd();
 }
 
-
 void curve::display()
 {
 	if (!isdisplayed)

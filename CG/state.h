@@ -1,5 +1,5 @@
 #pragma once
-enum { IDLE, DRAWING, EDITING, CUTTING };
+enum { IDLE, DRAWING, EDITING, CUTTING, _3D };
 
 class Cg_state
 {
